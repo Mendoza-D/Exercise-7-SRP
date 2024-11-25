@@ -1,51 +1,25 @@
 # Bike
+require_relative 'luggage'
 
 class Bike
-  attr_accessor :id, :color, :price, :weight, :rented, :cargo_storage
+  BASE_WEIGHT = 200 # lbs
+  PRICE_PER_WEIGHT = 2 # $ per lb
 
-  STANDARD_WEIGHT = 200 # lbs
+  attr_reader :id, :color, :base_price, :weight, :luggage
 
-  def initialize(id, color, price, cargo_storage, weight = STANDARD_WEIGHT, rented = false)
+  def initialize(id, color, base_price, extra_items)
     @id = id
     @color = color
-    @price = price
-    @weight = weight
-    @rented = rented
-    @cargo_storage = cargo_storage
+    @base_price = base_price
+    @weight = BASE_WEIGHT
+    @luggage = Luggage.new(extra_items)
   end
 
-  def rent!
-    self.rented = true
+  def price
+    base_price + (PRICE_PER_WEIGHT * total_weight)
   end
 
-  def pannier_capacity
-    cargo_storage.max_capacity
-  end
-
-  def pannier_remaining_capacity
-    cargo_storage.remaining_capacity
-  end
-end
-
-class CargoStorage
-  attr_reader :cargo_contents, :max_capacity
-
-  def initialize(max_capacity = 10)
-    @max_capacity = max_capacity
-    @cargo_contents = []
-  end
-
-  def add_cargo(item)
-    raise 'No space available for more cargo' if cargo_contents.size >= max_capacity
-
-    cargo_contents << item
-  end
-
-  def remove_cargo(item)
-    cargo_contents.delete(item)
-  end
-
-  def remaining_capacity
-    max_capacity - cargo_contents.size
+  def total_weight
+    weight + luggage.weight
   end
 end

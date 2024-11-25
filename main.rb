@@ -1,19 +1,12 @@
-#! /usr/bin/env ruby
+!# /usr/bin/env ruby
 
 require_relative 'bike'
+require_relative 'rental'
 
-# Create a cargo storage instance with a default capacity of 10 items
-cargo_storage = CargoStorage.new
+items = [:apple, :water, :protein_bar]
 
-# Instantiate a Bike with the cargo storage
-bike = Bike.new(1, :pink, 99.99, cargo_storage)
+bike = Bike.new(1, :pink, 99.99, items)
 
-# Add cargo items
-bike.cargo_storage.add_cargo(:apples)
-bike.cargo_storage.add_cargo(:water)
-bike.cargo_storage.add_cargo(:repair_kit)
+rental = Rental.new(bike)
 
-puts "Space for #{bike.pannier_remaining_capacity} items left."
-
-# Rent the bike
-bike.rent!
+puts "Total Price: #{rental.price}, Total Weight: #{rental.weight}"
